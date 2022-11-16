@@ -1,26 +1,37 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<template>  
+	<div>
+		<NavBar :user="user"/>
+		<div class="p-5">
+			<router-view :user="user"/>
+		</div>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import axios from 'axios'
+import NavBar from './components/NavBar'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    NavBar,
+  },
+  data() {
+        return {
+            user: null
+        }
+    },
+    async created() {
+        const response = await axios.get('http://127.0.0.1:8000/api/profile', {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('token')
+            }
+        })
+        
+        this.user = response.data
+    }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 </style>
