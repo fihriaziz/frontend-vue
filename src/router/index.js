@@ -3,6 +3,8 @@ import HomePage from "../components/HomePage.vue";
 import LoginPage from "../views/auth/LoginItem.vue";
 import RegisterPage from "../views/auth/RegisterPage.vue";
 import ForgotPassword from "../views/auth/ForgotPassword.vue";
+import ProfilePage from "../views/auth/ProfilePage.vue";
+import ResetPassword from "../views/auth/ResetPassword.vue";
 
 const routes = [
   {
@@ -21,9 +23,19 @@ const routes = [
     component: RegisterPage,
   },
   {
-    path: "/forgot",
-    name: "ForgotPassword",
+    path: "/forgot-password",
+    name: "forgot-password",
     component: ForgotPassword,
+  },
+  {
+    path: "/reset",
+    name: "ResetPassword",
+    component: ResetPassword,
+  },
+  {
+    path: "/profile",
+    name: "ProfilPage",
+    component: ProfilePage,
   },
 ];
 

@@ -17,7 +17,7 @@
                 <div class="mb-3">
                     <button type="submit" class="btn btn-primary d-block">Log In</button>
                 </div>
-                <router-link to="/forgot">Forgot Password?</router-link>
+                <router-link to="/forgot-password">Forgot Password?</router-link>
               </div>
             </form>
           </div>
@@ -45,8 +45,7 @@ export default {
 
         localStorage.setItem('token', response.data.access_token)
         localStorage.setItem('user', JSON.stringify(response.data.data))
-        console.log(response.data.data)
-        this.$router.push('/');
+        window.location.href = '/'
       }
     }
 }

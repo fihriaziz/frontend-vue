@@ -6,7 +6,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto" v-if="!user">
+          <ul class="navbar-nav ms-auto" v-if="user == null">
             <li class="nav-item">
               <router-link class="nav-link" to="/login">Login</router-link>
             </li>
@@ -14,7 +14,7 @@
               <router-link class="nav-link" to="/register">Register</router-link>
             </li>
           </ul>
-          <ul class="navbar-nav ms-auto" v-if="user">
+          <ul class="navbar-nav ms-auto" v-else>
           <router-link class="nav-link" aria-current="page" to="/">Home</router-link>
             <li class="nav-item">
             </li>
@@ -34,12 +34,16 @@
 
 export default {
     name: 'NavBar',
-    props: ['user'],
+    computed: {
+        user() {
+            return window.localStorage.getItem('token');
+        }
+    },
     methods: {
       handleClick() {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
-        this.$router.push('/login');
+        window.location.href = '/login'
       }
     }
 }
