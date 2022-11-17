@@ -1,6 +1,7 @@
 <template>  
 	<div>
-		<NavBar :user="user"/>
+		<NavBar :user="user" v-if="user"/>
+        <ModalComponent :user="user" v-if="user"/>
 		<div class="p-5">
 			<router-view :user="user"/>
 		</div>
@@ -10,15 +11,17 @@
 <script>
 import axios from 'axios'
 import NavBar from './components/NavBar'
+import ModalComponent from './components/ModalComponent.vue'
 
 export default {
   name: 'App',
   components: {
     NavBar,
+    ModalComponent
   },
   data() {
         return {
-            user: null
+            user: null,
         }
     },
     async created() {
@@ -29,7 +32,8 @@ export default {
         })
         
         this.user = response.data
-    }
+    },
+
 }
 </script>
 
