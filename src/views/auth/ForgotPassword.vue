@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import client from '../../Interceptor'
 
 export default {
     name: 'ForgotPassword',
@@ -101,17 +101,19 @@ export default {
     methods: {
         async handleSubmit(){
             this.loading = true
-            await axios.post('http://127.0.0.1:8000/api/forgot-password', {
+            await client.post('forgot-password', {
                 email: this.email
-            }).then(() => {
+            }).then((response) => {
+                if(response.status == 200) {
+                    this.$swal({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Password berhasil di reset, Cek email anda',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                }
                 this.email = '',
-                this.$swal({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: 'Password berhasil di reset, Cek email anda',
-                    showConfirmButton: false,
-                    timer: 3000
-                });
                 this.loading = false
             })
         }
