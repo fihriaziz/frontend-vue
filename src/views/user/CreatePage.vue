@@ -6,7 +6,7 @@
                 <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-6 col-sm-9">
                     <div class="card shadow-lg">
                         <div class="card-body p-5">
-                            <h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+                            <h1 class="fs-4 card-title fw-bold mb-4">Form Tambah User</h1>
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="name">Nama</label>
@@ -45,23 +45,12 @@
                                         Email is invalid
                                     </div>
                                 </div>
-
-                                <div class="d-flex align-items-center">
-                                    <div class="form-check">
-                                        <router-link to="/forgot-password" class="float-end">
-                                            Lupa Password?
-                                        </router-link>
-                                    </div>
+                                <div class="mb-3">
                                     <button type="submit" class="btn btn-primary ms-auto">
                                         Register
                                     </button>
                                 </div>
                             </form>
-                        </div>
-                        <div class="card-footer py-3 border-0">
-                            <div class="text-center">
-                                <router-link to="/register" class="text-dark">Register</router-link>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -75,43 +64,27 @@
 import axios from 'axios'
 
 export default {
-    name: 'RegisterPage', 
+    name: 'CreatePage',
     data() {
-      return {
-        form: {
-          name : '',
-          email: '',
-          password: '',
-          role: '',
-        },
-        theErrors: [],
-        is_loading: false
-      }
-    },
-
-    methods : {
-      async handleSubmit(){
-          try {
-            this.is_loading = true
-            const response = await axios.post('http://127.0.0.1:8000/api/register', this.form)  
-            if(response.status == 201) {
-              this.form.name = '',
-              this.form.email = '',
-              this.form.password = '',
-              this.form.role = ''
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Berhasil register',
-                showConfirmButton: false,
-                timer: 3000
-              }),
-              this.$router.push('/login')
+        return {
+            form: {
+                name : '',
+                email: '',
+                password: '',
+                role: ''
             }
-          } catch (e) {
-            console.log(this.theErrors = e.response.data.errors);
-          }
-      }
+        }
+    }, 
+    methods: {
+        async handleSubmit() {
+            try {
+                const response = await axios.post('http://127.0.0.1:8000/api/add-user', this.form)
+
+            console.log(response);
+            } catch (err) {
+                console.log(err.response.data.errors);
+            }
+        }
     }
 }
 </script>

@@ -1,27 +1,31 @@
 <template>
   <div>
-      <div class="contaienr">
-          <div class="row justify-content-center">
-              <div class="col-md-6">
-                  <div class="card">
-                      <div class="card-header">
-                          Reset Password
-                      </div>
-                      <form @submit.prevent="handleSubmit()">
-                          <div class="card-body">
-                              <div class="mb-3">
-                                  <label for="password">New Password</label>
-                                  <input type="password" v-model="password" id="password" class="form-control">
-                              </div>
-                              <div class="mb-3">
-                                  <button type="submit" class="btn btn-primary">Save</button>
-                              </div>
-                          </div>
-                      </form>
-                  </div>
-              </div>
-          </div>
-      </div>
+    <section class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-sm-center h-100">
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                <div class="card shadow-lg">
+                    <div class="card-body p-5">
+                        <h1 class="fs-4 card-title fw-bold mb-4">Reset password</h1>
+                        <form @submit.prevent="handleSubmit()">
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="password">Password Baru</label>
+                                <input id="password" v-model="password" type="password" class="form-control" required>
+                                <div class="invalid-feedback">
+                                    Password is required
+                                </div>
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <button type="submit" class="btn btn-primary d-flex align-items-center">Reset Password</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
   </div>
 </template>
 
@@ -32,11 +36,13 @@ export default {
     name: 'ResetPassword',
     data() {
         return {
-            password : ''
+            password : '',
+            loading :false
         }
     },
     methods: {
         async handleSubmit(){
+            this.loading = true
              await axios.post('http://127.0.0.1:8000/api/reset-password', {
                 token: this.$route.query.token,
                 password: this.password

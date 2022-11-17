@@ -1,39 +1,15 @@
 <template>
-  <div class="container">
-      <div class="row justify-content-center">
-          <div class="col-md-7">
-              <h4 class="text-center">All Users</h4>
-              <div class="d-flex justify-content-end">
-                  <button class="btn btn-secondary" v-if="user.role == 'Admin'">Add User</button>
-              </div>
-              <table class="table table-bordered mt-3">
-                  <thead>
-                        <tr>
-                            <th>Nama</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th v-if="user.role == 'Admin'">Aksi</th>
-                        </tr>
-                  </thead>
-                  <tbody>
-                      <tr v-for="(item, index) in dataUsers" :key="index">
-                          <td>{{ item.name}}</td>
-                          <td>{{ item.email }}</td>
-                          <td>{{ item.role }}</td>
-                          <td v-if="user.role == 'Admin'">
-                              <button type="button" class="btn btn-primary">Edit</button>
-                              <button type="button" class="btn btn-danger ms-3">Delete</button>
-                          </td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-      </div>
-  </div>
+  <div class="container bg-primary text-light p-5">
+        <div class="container bg-secondary p-5">
+            <h1 class="display-4" v-if="user">Welcome {{ user.name }}</h1>
+            <h1 class="display-4" v-if="!user">You are not log in!</h1>
+            <hr>
+            <p>Go to My Website</p>
+        </div>
+    </div>
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
     name: 'HomePage',
@@ -41,25 +17,7 @@ export default {
         user() {
             return JSON.parse(localStorage.getItem('user'));
         }
-    },
-    data() {
-        return {
-            dataUsers: []
-        }
-    },
-    mounted() {
-        this.showUser()
-    },
-    methods: {
-        async showUser(){
-            let {data} =await axios.get('http://127.0.0.1:8000/api/users', {
-               headers: {
-                Authorization: 'Bearer ' + localStorage.getItem('token')
-            }
-            })
-            this.dataUsers = data.data
-        }
-    }    
+    }
 }
 </script>
 
