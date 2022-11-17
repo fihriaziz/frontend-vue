@@ -10,20 +10,20 @@
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="email">E-Mail Address</label>
-                                    <input id="email" v-model="form.email" type="email" class="form-control" required>
-                                    <div class="invalid-feedback">
-                                        Email is invalid
-                                    </div>
+                                    <input id="email" v-model="form.email" type="email" :class="validation.email ? 'is-invalid form-control' : 'form-control' ">
+                                    <small class="text-danger mt-2">
+                                        {{ validation.email }}
+                                    </small>
                                 </div>
 
                                 <div class="mb-3">
                                     <div class="mb-2 w-100">
                                         <label class="text-muted" for="password">Password</label>
                                     </div>
-                                    <input id="password" v-model="form.password" type="password" class="form-control" required/>
-                                    <div class="invalid-feedback">
-                                        Password is required
-                                    </div>
+                                    <input id="password" v-model="form.password" type="password" :class="validation.password ? 'is-invalid form-control' : 'form-control'">
+                                    <small class="text-danger mt-2">
+                                        {{ validation.password }}
+                                    </small>
                                 </div>
                                 <div class="d-flex align-items-center">
                                     <div class="form-check">
@@ -60,6 +60,10 @@ export default {
             form: {
                 email: '',
                 password: ''
+            },
+            validation : {
+                email: '',
+                password : ''
             }
         }
     },
@@ -67,6 +71,10 @@ export default {
         async handleSubmit() {
             try {
                 const response = await axios.post('http://127.0.0.1:8000/api/login', this.form)
+                    .catch((error) => {
+                        this.validation.password = error.response.data?.password[0]
+                        this.validation.email = error.response.data?.email[0]
+                    })
                 if(response.status == 200){
                     this.form.email = '',
                     this.form.password = ''

@@ -10,40 +10,40 @@
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="name">Nama</label>
-                                    <input id="name" v-model="form.name" type="name" class="form-control" required>
-                                    <div class="invalid-feedback">
-                                        Name is invalid
-                                    </div>
+                                    <input id="name" v-model="form.name" type="name" :class="validation.name ? 'is-invalid form-control' : 'form-control'">
+                                    <small v-if="theErrors?.name" class="text-danger mt-2">
+                                        {{ theErrors?.name[0] }}
+                                    </small>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="email">E-Mail</label>
-                                    <input id="email" v-model="form.email" type="email" class="form-control" required>
-                                    <div class="invalid-feedback">
-                                        Email is invalid
-                                    </div>
+                                    <input id="email" v-model="form.email" type="email" :class="validation.email ? 'is-invalid form-control' : 'form-control' ">
+                                    <small class="text-danger mt-2">
+                                        {{ validation.email[0] }}
+                                    </small>
                                 </div>
 
                                 <div class="mb-3">
                                     <div class="mb-2 w-100">
                                         <label class="text-muted" for="password">Password</label>
                                     </div>
-                                    <input id="password" v-model="form.password" type="password" class="form-control" required/>
-                                    <div class="invalid-feedback">
-                                        Password is required
-                                    </div>
+                                    <input id="password" v-model="form.password" type="password" :class="validation.password ? 'is-invalid form-control' : 'form-control' "/>
+                                    <small class="text-danger mt-2">
+                                        {{ validation.password[0] }}
+                                    </small>
                                 </div>
 
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="role">Role</label>
-                                    <select v-model="form.role" id="role" class="form-control">
+                                    <select v-model="form.role" id="role" :class="validation.role ? 'is-invalid form-control' : 'form-control' ">
                                       <option value="">--Pilih Role--</option>
                                       <option value="User">User</option>
                                       <option value="Admin">Admin</option>
                                     </select>
-                                    <div class="invalid-feedback">
-                                        Email is invalid
-                                    </div>
+                                    <small class="text-danger mt-2">
+                                        {{ validation.role[0] }}
+                                    </small>
                                 </div>
 
                                 <div class="d-flex align-items-center">
@@ -60,7 +60,7 @@
                         </div>
                         <div class="card-footer py-3 border-0">
                             <div class="text-center">
-                                <router-link to="/register" class="text-dark">Register</router-link>
+                                Sudah punya akun? <router-link to="/login" class="text-dark">Login</router-link>
                             </div>
                         </div>
                     </div>
@@ -85,15 +85,20 @@ export default {
           role: '',
         },
         theErrors: [],
+        validation: {
+            name : '',
+            email: '',
+            password: '',
+            role: '',
+        },
         is_loading: false
       }
     },
-
     methods : {
       async handleSubmit(){
           try {
             this.is_loading = true
-            const response = await axios.post('http://127.0.0.1:8000/api/register', this.form)  
+            const response = await axios.post('http://127.0.0.1:8000/api/register', this.form)
             if(response.status == 201) {
               this.form.name = '',
               this.form.email = '',
@@ -109,7 +114,7 @@ export default {
               this.$router.push('/login')
             }
           } catch (e) {
-            console.log(this.theErrors = e.response.data.errors);
+            console.log(e.response.data);
           }
       }
     }
