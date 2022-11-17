@@ -3,21 +3,13 @@
       <section class="h-100">
         <div class="container h-100">
             <div class="row justify-content-sm-center h-100">
-                <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-6 col-sm-9">
+                <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
                     <div class="card shadow-lg">
                         <div class="card-body p-5">
-                            <h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+                            <h1 class="fs-4 card-title fw-bold mb-4">Login</h1>
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="name">Nama</label>
-                                    <input id="name" v-model="form.name" type="name" class="form-control" required>
-                                    <div class="invalid-feedback">
-                                        Name is invalid
-                                    </div>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="email">E-Mail</label>
+                                    <label class="mb-2 text-muted" for="email">E-Mail Address</label>
                                     <input id="email" v-model="form.email" type="email" class="form-control" required>
                                     <div class="invalid-feedback">
                                         Email is invalid
@@ -33,19 +25,6 @@
                                         Password is required
                                     </div>
                                 </div>
-
-                                <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="role">Role</label>
-                                    <select v-model="form.role" id="role" class="form-control">
-                                      <option value="">--Pilih Role--</option>
-                                      <option value="User">User</option>
-                                      <option value="Admin">Admin</option>
-                                    </select>
-                                    <div class="invalid-feedback">
-                                        Email is invalid
-                                    </div>
-                                </div>
-
                                 <div class="d-flex align-items-center">
                                     <div class="form-check">
                                         <router-link to="/forgot-password" class="float-end">
@@ -53,7 +32,7 @@
                                         </router-link>
                                     </div>
                                     <button type="submit" class="btn btn-primary ms-auto">
-                                        Register
+                                        Login
                                     </button>
                                 </div>
                             </form>
@@ -75,43 +54,31 @@
 import axios from 'axios'
 
 export default {
-    name: 'RegisterPage', 
+    name: 'LoginPage',
     data() {
-      return {
-        form: {
-          name : '',
-          email: '',
-          password: '',
-          role: '',
-        },
-        theErrors: [],
-        is_loading: false
-      }
-    },
-
-    methods : {
-      async handleSubmit(){
-          try {
-            this.is_loading = true
-            const response = await axios.post('http://127.0.0.1:8000/api/register', this.form)  
-            if(response.status == 201) {
-              this.form.name = '',
-              this.form.email = '',
-              this.form.password = '',
-              this.form.role = ''
-              this.$swal({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Berhasil register',
-                showConfirmButton: false,
-                timer: 3000
-              }),
-              this.$router.push('/login')
+        return {
+            form: {
+                email: '',
+                password: ''
             }
-          } catch (e) {
-            console.log(this.theErrors = e.response.data.errors);
-          }
-      }
+        }
+    },
+    methods: {
+        async handleSubmit() {
+            try {
+                const response = await axios.post('http://127.0.0.1:8000/api/login', this.form)
+                if(response.status == 200){
+                    this.form.email = '',
+                    this.form.password = ''
+                }
+                localStorage.setItem('token', response.data.access_token)
+                localStorage.setItem('user', JSON.stringify(response.data.data))
+                window.location.href  = '/'
+            } catch (error) {
+                console.log(error);                
+            }
+
+        }
     }
 }
 </script>
