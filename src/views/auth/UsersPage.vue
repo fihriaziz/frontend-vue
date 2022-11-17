@@ -4,7 +4,7 @@
           <div class="col-md-10">
               <h4 class="text-center">All Users</h4>
               <div class="d-flex justify-content-end">
-                <button @click="showModal = true" class="btn btn-sm btn-primary">Tambah User</button>
+                <button v-if="user?.role == 'Admin'" @click="showModal = true" class="btn btn-sm btn-primary">Tambah User</button>
               </div>
               <table class="table table-striped table-bordered mt-3">
                   <thead>
@@ -19,9 +19,17 @@
                       <tr v-for="(item, index) in dataUsers" :key="index">
                           <td>{{ item.name}}</td>
                           <td>{{ item.email }}</td>
-                          <td>{{ item.role }}</td>
+                          <td>
+                              <!-- <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" @click.prevent="updateRole(item.id)">
+                                <label class="form-check-label" for="flexSwitchCheckChecked">{{ item.role }}</label>
+                             </div> -->
+                              <div :class="item.role == 'Admin' ?  'badge rounded-pill text-bg-danger' : 'badge rounded-pill text-bg-success'">
+                                  {{ item.role }}
+                              </div>
+                          </td>
                           <td v-if="user?.role == 'Admin'">
-                              <router-link to="{name: 'EditPage', params:{id: item.id }}" class="btn btn-primary">Edit</router-link>
+                              <button @click.prevent="editUser(item)" class="btn btn-primary">Edit</button>
                               <button @click="deleteUser(item.id)" class="btn btn-danger ms-3">Delete</button>
                           </td>
                       </tr>
@@ -31,14 +39,14 @@
       </div>
 
       <!-- modal -->
-      <transition name="modal" v-if="showModal">
-          <div class="modal-mask">
+    <transition name="modal" v-if="showModal">
+        <div class="modal-mask">
             <div class="modal d-flex modal-lg" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content w-500">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                        <button type="button" class="btn-close" @click="showModal = false"></button>
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">{{ dataSelected == "" ? 'Tambah' : 'Update' }} User</h1>
+                        <button type="button" class="btn-close" @click="emptyState"></button>
                     </div>
                     <div class="modal-body">
                         <section>
@@ -70,15 +78,15 @@
                         </section>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="showModal = false">Close</button>
-                        <button type="button" class="btn btn-primary" @click="handleSubmit">Save changes</button>
+                        <button type="button" class="btn btn-secondary" @click="emptyState">Tutup</button>
+                        <button type="button" class="btn btn-primary" @click="handleSubmit">Simpan</button>
                     </div>
                     </div>
                 </div>
             </div>
         </div>
     </transition>
-        <!-- end moda; -->
+        <!-- end modal -->
   </div>
 </template>
 
@@ -95,11 +103,13 @@ export default {
     data() {
         return {
             form: {
+                id:"",
                 name : '',
                 email: '',
                 password: '',
                 role: ''
             },
+            dataSelected: [],
             dataUsers: [],
             isModalVisible: false,
             showModal: false
@@ -113,9 +123,45 @@ export default {
         }
     },
     methods: {
-        async handleSubmit() {
+        handleSubmit() {
+            if(this.dataSelected == "") {
+                this.createUser();
+            } else {
+                this.updateUser();
+            }
+        },
+        async updateUser() {
+            try {
+                await client.put('update-user/'+this.form.id, this.form )
+                    .then(() => {
+                        this.$swal({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data user berhasil di update',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                    })
+                this.showUser();
+                this.showModal = false;
+            } catch (err) {
+                console.log(err.response.data.errors);
+            }
+        },
+        async createUser() {
             try {
                 await client.post('add-user/', this.form)
+                    .then(response => {
+                        if(response.status == 201) {
+                        this.$swal({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data user berhasil di tambah',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });            
+                    }
+                    })
                 this.showUser();
                 this.showModal = false;
             } catch (err) {
@@ -125,6 +171,15 @@ export default {
         async showUser(){
             let {data} = await client.get('users')
             this.dataUsers = data.data
+        },
+        async editUser(item) {
+            this.showModal = true;
+            this.dataSelected = item;
+            
+            this.form.id = this.dataSelected.id
+            this.form.name = this.dataSelected.name
+            this.form.email = this.dataSelected.email
+            this.form.role = this.dataSelected.role
         },
         async deleteUser(id) {
             await client.delete(`delete-user/${id}`)
@@ -140,6 +195,19 @@ export default {
                     }
             })
             this.showUser();
+        },
+
+    //  async updateRole(id) {
+    //     let response = await client.put('change/'+id)
+    //      .then(response => console.log(response))
+    //      console.log(response);
+    //  },
+        emptyState() {
+            this.showModal = false;
+            this.form.name = ""
+            this.form.email = ""
+            this.form.password = ""
+            this.form.role = ""
         }
     }    
 }
