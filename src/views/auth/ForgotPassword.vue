@@ -10,9 +10,9 @@
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="email">E-Mail Address</label>
-                                    <input id="email" v-model="email" type="email" class="form-control" required>
-                                    <div class="invalid-feedback">
-                                        Email is invalid
+                                    <input id="email" v-model="email" type="email" :class="theErrors.email ? 'is-invalid form-control' : 'form-control'">
+                                    <div v-if="theErrors?.email" class="invalid-feedback">
+                                        {{ theErrors?.email[0] }}
                                     </div>
                                 </div>
 
@@ -91,6 +91,7 @@ export default {
         return {
             loading : false,
             email: '',
+            theErrors: []
         }
     },
     methods: {
@@ -98,7 +99,8 @@ export default {
             this.loading = true
             await client.post('forgot-password', {
                 email: this.email
-            }).then((response) => {
+            })
+            .then((response) => {
                 if(response.status == 200) {
                     this.$swal({
                         icon: 'success',
@@ -109,6 +111,10 @@ export default {
                     });
                 }
                 this.email = '',
+                this.loading = false
+            })
+            .catch((error)=> {
+                this.theErrors = error.response?.data?.errors,
                 this.loading = false
             })
         }

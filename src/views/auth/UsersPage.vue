@@ -9,7 +9,7 @@
               <table class="table table-striped table-bordered mt-3">
                   <thead>
                         <tr>
-                            <th>Nama</th>
+                            <th>Name</th>
                             <th>Email</th>
                             <th>Role</th>
                             <th v-if="user?.role == 'Admin'">Action</th>
@@ -19,14 +19,14 @@
                       <tr v-for="(item, index) in dataUsers" :key="index">
                           <td>{{ item.name}}</td>
                           <td>{{ item.email }}</td>
-                          <td>
-                              <!-- <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckChecked" @click.prevent="updateRole(item.id)">
-                                <label class="form-check-label" for="flexSwitchCheckChecked">{{ item.role }}</label>
-                             </div> -->
-                              <div :class="item.role == 'Admin' ?  'badge rounded-pill text-bg-danger' : 'badge rounded-pill text-bg-success'">
-                                  {{ item.role }}
-                              </div>
+                          <td v-if="user?.role == 'Admin'">
+                              <div class="form-check form-switch">
+                                <input class="form-check-input" :checked="item.role == 'Admin' ? true : false" type="checkbox" role="switch" id="flexSwitchCheckChecked" @click.prevent="updateRole(item.id)">
+                                <label :class="item.role == 'Admin' ?  'badge rounded-pill text-bg-danger' : 'badge rounded-pill text-bg-success'" for="flexSwitchCheckChecked">{{ item.role }}</label>
+                             </div>
+                          </td>
+                          <td v-else>
+                              <label :class="item.role == 'Admin' ?  'badge rounded-pill text-bg-danger' : 'badge rounded-pill text-bg-success'" for="flexSwitchCheckChecked">{{ item.role }}</label>
                           </td>
                           <td v-if="user?.role == 'Admin'">
                               <button @click.prevent="editUser(item)" class="btn btn-primary">Edit</button>
@@ -52,37 +52,37 @@
                         <section>
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="name">Name</label>
-                                <input id="name" v-model="form.name" type="name" :class="validation.name ? 'is-invalid form-control' : 'form-control' " required>
+                                <input id="name" v-model="form.name" type="name" :class="theErrors.name ? 'is-invalid form-control' : 'form-control' ">
                             </div>
-                            <small class="text-danger mt-2">
-                                {{ validation.name[0] }}
+                            <small v-if="theErrors?.name" class="text-danger">
+                                {{ theErrors?.name[0] }}
                             </small>
 
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="email">E-Mail Address</label>
-                                <input id="email" v-model="form.email" type="email" :class="validation.email ? 'is-invalid form-control' : 'form-control' " required>
+                                <input id="email" v-model="form.email" type="email" :class="theErrors.email ? 'is-invalid form-control' : 'form-control' ">
                             </div>
-                            <small class="text-danger mt-2">
-                                {{ validation.email[0] }}
+                            <small v-if="theErrors?.email" class="text-danger">
+                                {{ theErrors?.email[0] }}
                             </small>
 
                             <div class="mb-3">
                                 <div class="mb-2 w-100">
                                     <label class="text-muted" for="password">Password</label>
                                 </div>
-                                <input id="password" v-model="form.password" type="password" :class="validation.password ? 'is-invalid form-control' : 'form-control' " required/>
+                                <input id="password" v-model="form.password" type="password" class="form-control"/>
                             </div>
 
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="role">Role</label>
-                                <select v-model="form.role" id="role" :class="validation.role ? 'is-invalid form-control' : 'form-control' ">
+                                <select v-model="form.role" id="role" :class="theErrors.role ? 'is-invalid form-control' : 'form-control' ">
                                     <option value="">--Choose Role--</option>
                                     <option value="User">User</option>
                                     <option value="Admin">Admin</option>
                                 </select>
                             </div>
-                            <small class="text-danger mt-2">
-                                {{ validation.role[0] }}
+                            <small v-if="theErrors?.role" class="text-danger">
+                                {{ theErrors?.role[0] }}
                             </small>
                         </section>
                     </div>
@@ -118,15 +118,9 @@ export default {
                 password: '',
                 role: ''
             },
-            validation: {
-                name : '',
-                email: '',
-                password: '',
-                role: '',
-            },
+            theErrors: [],
             dataSelected: [],
             dataUsers: [],
-            isModalVisible: false,
             showModal: false
         }
     },
@@ -156,23 +150,36 @@ export default {
                             showConfirmButton: false,
                             timer: 3000
                         });
+                        this.showModal = false;
+                        this.showUser();
                     })
-                this.showUser();
-                this.showModal = false;
+                    .catch((error) => {
+                        this.theErrors = error.response?.data?.errors
+                    });
+                
             } catch (err) {
                 console.log(err.response.data.errors);
             }
         },
         async createUser() {
-            try {
+            try {        
                 await client.post('add-user/', this.form)
+                .then(() => {
+                    this.showModal = false;
+                    this.showUser();
+                    this.$swal({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data user berhasil di tambah',
+                            showConfirmButton: false,
+                            timer: 3000
+                        });
+                })
                     .catch((error) => {
-                        this.validation = error.response?.data
+                        this.theErrors = error.response?.data?.errors
                     });
-                this.showUser();
-                this.showModal = false;
             } catch (err) {
-                console.log(err.response.data.errors);
+                // console.log(err.response.data.errors);
             }
         },
         async showUser(){
@@ -189,7 +196,14 @@ export default {
             this.form.role = this.dataSelected.role
         },
         async deleteUser(id) {
-            await client.delete(`delete-user/${id}`)
+            await this.$swal.fire({
+                title: 'Do you want to delete user?',
+                showCancelButton: true,
+                confirmButtonColor: '#dc3545',
+                confirmButtonText: 'Hapus',
+                }).then((response) => {
+                if (response.isConfirmed) {
+                client.delete(`delete-user/${id}`)
                 .then(response => {
                     if(response.status == 200) {
                         this.$swal({
@@ -200,15 +214,21 @@ export default {
                             timer: 3000
                         });            
                     }
+                    this.showUser();
             })
-            this.showUser();
+                } else if (response.isDenied) {
+                    this.$swal.fire('Saved!', '', 'success')
+                }
+                })
+            
         },
 
-    //  async updateRole(id) {
-    //     let response = await client.put('change/'+id)
-    //      .then(response => console.log(response))
-    //      console.log(response);
-    //  },
+     async updateRole(id) {
+        await client.put('change/'+id)
+         .then(response => console.log(response))
+         this.showUser()
+     },
+
         emptyState() {
             this.showModal = false;
             this.form.name = ""

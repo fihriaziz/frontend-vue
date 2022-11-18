@@ -10,9 +10,9 @@
                         <form @submit.prevent="handleSubmit()">
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="password">New Password</label>
-                                <input id="password" v-model="password" type="password" class="form-control" required>
-                                <div class="invalid-feedback">
-                                    Password is required
+                                <input id="password" v-model="password" type="password" :class="theErrors.password ? 'is-invalid form-control' : 'form-control'">
+                                <div v-if="theErrors?.password" class="invalid-feedback">
+                                    {{ theErrors?.password[0] }}
                                 </div>
                             </div>
 
@@ -37,7 +37,8 @@ export default {
     data() {
         return {
             password : '',
-            loading :false
+            loading :false,
+            theErrors: []
         }
     },
     methods: {
@@ -46,7 +47,8 @@ export default {
              await client.post('reset-password', {
                 token: this.$route.query.token,
                 password: this.password
-            }).then(() => {
+            })
+            .then(() => {
                 this.password = ''
                 this.$swal({
                     icon: 'success',
@@ -55,6 +57,9 @@ export default {
                     timer: 1500
                     });
                 this.$router.push('/login');
+            })
+            .catch((error)=> {
+                this.theErrors = error.response?.data?.errors
             })
         }
     },

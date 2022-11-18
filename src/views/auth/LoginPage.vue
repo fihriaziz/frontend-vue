@@ -10,9 +10,9 @@
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="email">E-Mail Address</label>
-                                    <input id="email" v-model="form.email" type="email" :class="validation.email ? 'is-invalid form-control' : 'form-control' ">
-                                    <small class="text-danger mt-2">
-                                        {{ validation.email }}
+                                    <input id="email" v-model="form.email" type="email" :class="theErrors.email ? 'is-invalid form-control' : 'form-control' ">
+                                    <small v-if="theErrors?.email" class="text-danger mt-2">
+                                        {{ theErrors?.email[0] }}
                                     </small>
                                 </div>
 
@@ -20,9 +20,9 @@
                                     <div class="mb-2 w-100">
                                         <label class="text-muted" for="password">Password</label>
                                     </div>
-                                    <input id="password" v-model="form.password" type="password" :class="validation.password ? 'is-invalid form-control' : 'form-control'">
-                                    <small class="text-danger mt-2">
-                                        {{ validation.password }}
+                                    <input id="password" v-model="form.password" type="password" :class="theErrors.password ? 'is-invalid form-control' : 'form-control'">
+                                    <small v-if="theErrors?.password" class="text-danger mt-2">
+                                        {{ theErrors?.password[0] }}
                                     </small>
                                 </div>
                                 <div class="d-flex align-items-center">
@@ -61,6 +61,7 @@ export default {
                 email: '',
                 password: ''
             },
+            theErrors: [],
             validation : {
                 email: '',
                 password : ''
@@ -71,9 +72,8 @@ export default {
         async handleSubmit() {
             try {
                 const response = await client.post('login', this.form)
-                    .catch((error) => {
-                        this.validation.password = error.response.data?.password[0]
-                        this.validation.email = error.response.data?.email[0]
+                        .catch((error)=> {
+                        this.theErrors = error.response?.data?.errors
                     })
                 if(response.status == 200){
                     this.form.email = '',
