@@ -9,7 +9,7 @@
                         <h1 class="fs-4 card-title fw-bold mb-4">Reset password</h1>
                         <form @submit.prevent="handleSubmit()">
                             <div class="mb-3">
-                                <label class="mb-2 text-muted" for="password">Password Baru</label>
+                                <label class="mb-2 text-muted" for="password">New Password</label>
                                 <input id="password" v-model="password" type="password" class="form-control" required>
                                 <div class="invalid-feedback">
                                     Password is required

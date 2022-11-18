@@ -4,7 +4,7 @@
           <div class="col-md-10">
               <h4 class="text-center">All Users</h4>
               <div class="d-flex justify-content-end">
-                <button v-if="user?.role == 'Admin'" @click="showModal = true" class="btn btn-sm btn-primary">Tambah User</button>
+                <button v-if="user?.role == 'Admin'" @click="showModal = true" class="btn btn-sm btn-primary">Add User</button>
               </div>
               <table class="table table-striped table-bordered mt-3">
                   <thead>
@@ -12,7 +12,7 @@
                             <th>Nama</th>
                             <th>Email</th>
                             <th>Role</th>
-                            <th v-if="user?.role == 'Admin'">Aksi</th>
+                            <th v-if="user?.role == 'Admin'">Action</th>
                         </tr>
                   </thead>
                   <tbody>
@@ -51,16 +51,16 @@
                     <div class="modal-body">
                         <section>
                             <div class="mb-3">
-                                <label class="mb-2 text-muted" for="name">Nama</label>
-                                <input id="name" v-model="form.name" type="name" class="form-control" required>
+                                <label class="mb-2 text-muted" for="name">Name</label>
+                                <input id="name" v-model="form.name" type="name" :class="validation.name ? 'is-invalid form-control' : 'form-control' " required>
                             </div>
                             <small class="text-danger mt-2">
                                 {{ validation.name[0] }}
                             </small>
 
                             <div class="mb-3">
-                                <label class="mb-2 text-muted" for="email">E-Mail</label>
-                                <input id="email" v-model="form.email" type="email" class="form-control" required>
+                                <label class="mb-2 text-muted" for="email">E-Mail Address</label>
+                                <input id="email" v-model="form.email" type="email" :class="validation.email ? 'is-invalid form-control' : 'form-control' " required>
                             </div>
                             <small class="text-danger mt-2">
                                 {{ validation.email[0] }}
@@ -70,13 +70,13 @@
                                 <div class="mb-2 w-100">
                                     <label class="text-muted" for="password">Password</label>
                                 </div>
-                                <input id="password" v-model="form.password" type="password" class="form-control" required/>
+                                <input id="password" v-model="form.password" type="password" :class="validation.password ? 'is-invalid form-control' : 'form-control' " required/>
                             </div>
 
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="role">Role</label>
-                                <select v-model="form.role" id="role" class="form-control">
-                                    <option value="">--Pilih Role--</option>
+                                <select v-model="form.role" id="role" :class="validation.role ? 'is-invalid form-control' : 'form-control' ">
+                                    <option value="">--Choose Role--</option>
                                     <option value="User">User</option>
                                     <option value="Admin">Admin</option>
                                 </select>
@@ -87,8 +87,8 @@
                         </section>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="emptyState">Tutup</button>
-                        <button type="button" class="btn btn-primary" @click="handleSubmit">Simpan</button>
+                        <button type="button" class="btn btn-secondary" @click="emptyState">Close</button>
+                        <button type="button" class="btn btn-primary" @click="handleSubmit">Save</button>
                     </div>
                     </div>
                 </div>

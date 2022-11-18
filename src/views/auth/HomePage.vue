@@ -4,8 +4,8 @@
                 <!-- Masthead Avatar Image-->
                 <img class="masthead-avatar mb-5" src="../../assets/logo.png" alt="..." />
                 <!-- Masthead Heading-->
-                <h1 class="masthead-heading text-uppercase mb-0" v-if="user">Selamat datang, {{ user.name }}</h1>
-                <h1 class="masthead-heading text-uppercase mb-0" v-if="!user">Kamu belum login</h1>
+                <h1 class="masthead-heading text-uppercase mb-0" v-if="user">Welcome, {{ user.name }}</h1>
+                <h1 class="masthead-heading text-uppercase mb-0" v-if="!user">You are not log in!</h1>
                 <!-- Icon Divider-->
                 <div class="divider-custom divider-light">
                     <div class="divider-custom-line"></div>

@@ -6,7 +6,7 @@
                 <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
                     <div class="card shadow-lg">
                         <div class="card-body p-5">
-                            <h1 class="fs-4 card-title fw-bold mb-4">Lupa password</h1>
+                            <h1 class="fs-4 card-title fw-bold mb-4">Forgot password</h1>
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="email">E-Mail Address</label>
@@ -17,7 +17,7 @@
                                 </div>
 
                                 <div class="d-flex align-items-center">
-                                    <button type="submit" class="btn btn-primary">Kirim Email</button>
+                                    <button type="submit" class="btn btn-primary">Send Email</button>
                                     <template v-if="loading">
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin: auto; background: none; display: block; shape-rendering: auto;" width="30px" height="30px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
                                     <g transform="rotate(0 50 50)">
@@ -73,11 +73,6 @@
                                 </template>
                                 </div>
                             </form>
-                        </div>
-                        <div class="card-footer py-3 border-0">
-                            <div class="text-center">
-                                Belum punya akun? <router-link to="/register" class="text-dark">Register</router-link>
-                            </div>
                         </div>
                     </div>
                 </div>

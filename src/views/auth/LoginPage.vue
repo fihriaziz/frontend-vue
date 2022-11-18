@@ -28,7 +28,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="form-check">
                                         <router-link to="/forgot-password" class="float-end">
-                                            Lupa Password?
+                                            Forgot Password?
                                         </router-link>
                                     </div>
                                     <button type="submit" class="btn btn-primary ms-auto">
@@ -39,7 +39,7 @@
                         </div>
                         <div class="card-footer py-3 border-0">
                             <div class="text-center">
-                                Belum punya akun? <router-link to="/register" class="text-dark">Register</router-link>
+                                Create new account <router-link to="/register" class="text-dark">Register</router-link>
                             </div>
                         </div>
                     </div>
