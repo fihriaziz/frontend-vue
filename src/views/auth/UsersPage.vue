@@ -54,11 +54,17 @@
                                 <label class="mb-2 text-muted" for="name">Nama</label>
                                 <input id="name" v-model="form.name" type="name" class="form-control" required>
                             </div>
+                            <small class="text-danger mt-2">
+                                {{ validation.name[0] }}
+                            </small>
 
                             <div class="mb-3">
                                 <label class="mb-2 text-muted" for="email">E-Mail</label>
                                 <input id="email" v-model="form.email" type="email" class="form-control" required>
                             </div>
+                            <small class="text-danger mt-2">
+                                {{ validation.email[0] }}
+                            </small>
 
                             <div class="mb-3">
                                 <div class="mb-2 w-100">
@@ -75,6 +81,9 @@
                                     <option value="Admin">Admin</option>
                                 </select>
                             </div>
+                            <small class="text-danger mt-2">
+                                {{ validation.role[0] }}
+                            </small>
                         </section>
                     </div>
                     <div class="modal-footer">
@@ -108,6 +117,12 @@ export default {
                 email: '',
                 password: '',
                 role: ''
+            },
+            validation: {
+                name : '',
+                email: '',
+                password: '',
+                role: '',
             },
             dataSelected: [],
             dataUsers: [],
@@ -151,17 +166,9 @@ export default {
         async createUser() {
             try {
                 await client.post('add-user/', this.form)
-                    .then(response => {
-                        if(response.status == 201) {
-                        this.$swal({
-                            icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Data user berhasil di tambah',
-                            showConfirmButton: false,
-                            timer: 3000
-                        });            
-                    }
-                    })
+                    .catch((error) => {
+                        this.validation = error.response?.data
+                    });
                 this.showUser();
                 this.showModal = false;
             } catch (err) {
