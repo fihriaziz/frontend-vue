@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import client from '../../Interceptor'
 
 export default {
     name: 'LoginPage',
@@ -70,7 +70,7 @@ export default {
     methods: {
         async handleSubmit() {
             try {
-                const response = await axios.post('http://127.0.0.1:8000/api/login', this.form)
+                const response = await client.post('login', this.form)
                     .catch((error) => {
                         this.validation.password = error.response.data?.password[0]
                         this.validation.email = error.response.data?.email[0]

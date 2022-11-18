@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import client from '../../Interceptor'
 
 export default {
     name: 'RegisterPage', 
@@ -98,7 +98,7 @@ export default {
       async handleSubmit(){
           try {
             this.is_loading = true
-            const response = await axios.post('http://127.0.0.1:8000/api/register', this.form)
+            const response = await client.post('register', this.form)
             if(response.status == 201) {
               this.form.name = '',
               this.form.email = '',

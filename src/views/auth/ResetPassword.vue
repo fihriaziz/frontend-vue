@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import client from '../../Interceptor';
 
 export default {
     name: 'ResetPassword',
@@ -43,7 +43,7 @@ export default {
     methods: {
         async handleSubmit(){
             this.loading = true
-             await axios.post('http://127.0.0.1:8000/api/reset-password', {
+             await client.post('reset-password', {
                 token: this.$route.query.token,
                 password: this.password
             }).then(() => {
