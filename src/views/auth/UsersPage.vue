@@ -4,7 +4,7 @@
           <div class="col-md-10">
               <h4 class="text-center">All Users</h4>
               <div class="d-flex justify-content-end">
-                <button v-if="user?.role == 'Admin'" @click="showModal = true" class="btn btn-sm btn-primary">Add User</button>
+                <button v-if="user?.role == 'Admin'" @click="showModal = true, dataSelected = []" class="btn btn-sm btn-primary">Add User</button>
               </div>
               <table class="table table-striped table-bordered mt-3">
                   <thead>
@@ -133,7 +133,7 @@ export default {
     },
     methods: {
         handleSubmit() {
-            if(this.dataSelected == "") {
+            if(this.dataSelected.length === 0) {
                 this.createUser();
             } else {
                 this.updateUser();
