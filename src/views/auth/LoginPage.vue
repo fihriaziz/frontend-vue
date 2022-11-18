@@ -81,14 +81,17 @@ export default {
                         window.location.href  = '/'
                         })
                         .catch((error)=> {
-                        this.theErrors = error.response?.data?.errors
-                        this.$swal({
-                            icon: 'error',
-                            title: 'Failed',
-                            text: error.response?.data?.message,
-                            showConfirmButton: false,
-                            timer: 3000
-                        });
+                        if(error.response?.status == 401) {
+                            this.$swal({
+                                icon: 'error',
+                                title: 'Failed',
+                                text: error.response?.data?.message,
+                                showConfirmButton: false,
+                                timer: 3000
+                            });
+                        } else {
+                            this.theErrors = error.response?.data?.errors
+                        }
                     })
             } catch (error) {
                 console.log(error);                
