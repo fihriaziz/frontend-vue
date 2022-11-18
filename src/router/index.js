@@ -4,7 +4,6 @@ import RegisterPage from "../views/auth/RegisterPage.vue";
 import ForgotPassword from "../views/auth/ForgotPassword.vue";
 import UsersPage from "../views/auth/UsersPage.vue";
 import ResetPassword from "../views/auth/ResetPassword.vue";
-import CreatePage from "../views/user/CreatePage.vue";
 import LoginPage from "../views/auth/LoginPage.vue";
 
 const routes = [
@@ -37,11 +36,6 @@ const routes = [
     path: "/users",
     name: "UsersPage",
     component: UsersPage,
-  },
-  {
-    path: "/create",
-    name: "CreatePage",
-    component: CreatePage,
   },
 ];
 
