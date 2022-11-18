@@ -3,11 +3,11 @@
         <header class="masthead bg-primary text-white text-center">
                 <div class="container d-flex align-items-center flex-column">
                     <!-- Masthead Avatar Image-->
-                    <img v-if="user.role == 'Admin' " class="masthead-avatar mb-5" src="../../assets/admin.jpg" alt="..." />
+                    <img v-if="user?.role == 'Admin' " class="masthead-avatar mb-5" src="../../assets/admin.jpg" alt="..." />
                     <img v-else class="masthead-avatar mb-5" src="../../assets/guest.jpg" alt="..." />
                     <!-- Masthead Heading-->
-                    <h1 class="masthead-heading text-uppercase mb-0" v-if="user">Welcome, {{ user.name }}</h1>
-                    <h1 class="masthead-heading text-uppercase mb-0" v-if="!user">You are not log in!</h1>
+                    <h1 class="masthead-heading text-uppercase mb-0" v-if="user">Welcome, {{ user?.name }}</h1>
+                    <h1 class="masthead-heading text-uppercase mb-0" v-else>You are not log in!</h1>
                     <!-- Icon Divider-->
                     <div class="divider-custom divider-light">
                         <div class="divider-custom-line"></div>

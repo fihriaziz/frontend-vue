@@ -10,7 +10,7 @@
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="email">E-Mail Address</label>
-                                    <input id="email" v-model="form.email" type="email" :class="theErrors.email ? 'is-invalid form-control' : 'form-control' ">
+                                    <input id="email" v-model="form.email" type="email" :class="theErrors?.email ? 'is-invalid form-control' : 'form-control' ">
                                     <small v-if="theErrors?.email" class="text-danger mt-2">
                                         {{ theErrors?.email[0] }}
                                     </small>
@@ -20,7 +20,7 @@
                                     <div class="mb-2 w-100">
                                         <label class="text-muted" for="password">Password</label>
                                     </div>
-                                    <input id="password" v-model="form.password" type="password" :class="theErrors.password ? 'is-invalid form-control' : 'form-control'">
+                                    <input id="password" v-model="form.password" type="password" :class="theErrors?.password ? 'is-invalid form-control' : 'form-control'">
                                     <small v-if="theErrors?.password" class="text-danger mt-2">
                                         {{ theErrors?.password[0] }}
                                     </small>
@@ -78,8 +78,8 @@ export default {
                         showConfirmButton: false,
                         timer: 3000
                     });
-                localStorage.setItem('token', response.data.access_token)
-                localStorage.setItem('user', JSON.stringify(response.data.data))
+                localStorage.setItem('token', response?.data?.access_token)
+                localStorage.setItem('user', JSON.stringify(response?.data?.data))
                 window.location.href  = '/'
             } catch (error) {
                 console.log(error);                
