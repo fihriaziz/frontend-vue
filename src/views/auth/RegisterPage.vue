@@ -9,7 +9,7 @@
                             <h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
                             <form @submit.prevent="handleSubmit()">
                                 <div class="mb-3">
-                                    <label class="mb-2 text-muted" for="name">Nama</label>
+                                    <label class="mb-2 text-muted" for="name">Name</label>
                                     <input id="name" v-model="form.name" type="name" :class="theErrors.name ? 'is-invalid form-control' : 'form-control'">
                                     <small v-if="theErrors?.name" class="text-danger mt-2">
                                         {{ theErrors?.name[0] }}
@@ -49,7 +49,7 @@
                                 <div class="d-flex align-items-center">
                                     <div class="form-check">
                                         <router-link to="/forgot-password" class="float-end">
-                                            Lupa Password?
+                                            Forgot Password?
                                         </router-link>
                                     </div>
                                     <button type="submit" class="btn btn-primary ms-auto">
@@ -60,7 +60,7 @@
                         </div>
                         <div class="card-footer py-3 border-0">
                             <div class="text-center">
-                                Sudah punya akun? <router-link to="/login" class="text-dark">Login</router-link>
+                                Alredy have an account? <router-link to="/login" class="text-dark">Login</router-link>
                             </div>
                         </div>
                     </div>

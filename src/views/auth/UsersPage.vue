@@ -59,7 +59,7 @@
                             </small>
 
                             <div class="mb-3">
-                                <label class="mb-2 text-muted" for="email">E-Mail Address</label>
+                                <label class="mb-2 text-muted" for="email">E-Mail</label>
                                 <input id="email" v-model="form.email" type="email" :class="theErrors.email ? 'is-invalid form-control' : 'form-control' ">
                             </div>
                             <small v-if="theErrors?.email" class="text-danger">
@@ -145,8 +145,8 @@ export default {
                     .then(() => {
                         this.$swal({
                             icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Data user berhasil di update',
+                            title: 'Success',
+                            text: 'Success update user',
                             showConfirmButton: false,
                             timer: 3000
                         });
@@ -169,8 +169,8 @@ export default {
                     this.showUser();
                     this.$swal({
                             icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Data user berhasil di tambah',
+                            title: 'Success',
+                            text: 'Success create user',
                             showConfirmButton: false,
                             timer: 3000
                         });
@@ -200,7 +200,7 @@ export default {
                 title: 'Do you want to delete user?',
                 showCancelButton: true,
                 confirmButtonColor: '#dc3545',
-                confirmButtonText: 'Hapus',
+                confirmButtonText: 'Delete',
                 }).then((response) => {
                 if (response.isConfirmed) {
                 client.delete(`delete-user/${id}`)
@@ -208,8 +208,8 @@ export default {
                     if(response.status == 200) {
                         this.$swal({
                             icon: 'success',
-                            title: 'Berhasil',
-                            text: 'Data user berhasil di hapus',
+                            title: 'Success',
+                            text: 'Success delete user',
                             showConfirmButton: false,
                             timer: 3000
                         });            

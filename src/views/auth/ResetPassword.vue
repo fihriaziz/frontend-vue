@@ -52,7 +52,7 @@ export default {
                 this.password = ''
                 this.$swal({
                     icon: 'success',
-                    title: 'Password berhasil di reset',
+                    title: 'Reset password success',
                     showConfirmButton: false,
                     timer: 1500
                     });

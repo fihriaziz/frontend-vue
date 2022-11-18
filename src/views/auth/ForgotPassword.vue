@@ -105,7 +105,7 @@ export default {
                     this.$swal({
                         icon: 'success',
                         title: 'Berhasil',
-                        text: 'Password berhasil di reset, Cek email anda',
+                        text: 'Reset password success, Check your email',
                         showConfirmButton: false,
                         timer: 3000
                     });

@@ -62,10 +62,6 @@ export default {
                 password: ''
             },
             theErrors: [],
-            validation : {
-                email: '',
-                password : ''
-            }
         }
     },
     methods: {
@@ -75,10 +71,13 @@ export default {
                         .catch((error)=> {
                         this.theErrors = error.response?.data?.errors
                     })
-                if(response.status == 200){
-                    this.form.email = '',
-                    this.form.password = ''
-                }
+                this.$swal({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: 'Success login',
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                 localStorage.setItem('token', response.data.access_token)
                 localStorage.setItem('user', JSON.stringify(response.data.data))
                 window.location.href  = '/'
